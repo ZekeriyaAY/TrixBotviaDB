@@ -4,11 +4,6 @@ import logging
 import json
 import os
 
-logger = logging.getLogger('discord')
-logger.setLevel(logging.WARNING)
-handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-logger.addHandler(handler)
 
 intents = discord.Intents.default()
 intents.typing = False
@@ -50,7 +45,7 @@ async def on_ready():
         if guild == "GUILD":
             break
     print(f'Ping: {round(client.latency * 1000)}ms')
-    await client.change_presence(activity=discord.Game(name=f'Trix Bot'))
+    await client.change_presence(activity=discord.Game(name=f'TrixBot | © @zek#0243'))
     print("-------------------------------------------")
 
 @client.event
