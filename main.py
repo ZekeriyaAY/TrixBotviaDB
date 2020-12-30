@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import logging
 import json
-
+import os
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.WARNING)
