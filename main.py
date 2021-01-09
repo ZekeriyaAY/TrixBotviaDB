@@ -1,51 +1,46 @@
 import discord
 from discord.ext import commands
-import logging
-import json
 import os
+import json
 
-
-intents = discord.Intents.default()
-intents.typing = False
-intents.presences = False
-
-def get_prefix(client):
-    with open('prefixes.json', 'r') as f:
+def get_prefix(client, msg):
+    with open('./jsons/prefixes.json', 'r') as f:
         prefixes = json.load(f)
-    return prefixes[client.guild.id]
+    return prefixes[str(msg.guild.id)]
 
-def get_autorole(client):
-    with open('autoroles.json', 'r') as f:
+
+def get_autorole(client, msg):
+    with open('./jsons/auto_roles.json', 'r') as f:
+        roles = json.load(f)
+    return roles[str(msg.guild.id)]
+
+
+def get_autorole_int(client, msg):
+    with open('./jsons/auto_roles_int.json', 'r') as f:
         roles = json.load(f)
     return roles[str(client.guild.id)]
 
-DESCRIPTION = ''
-BOT_PREFIX = get_prefix
-print(BOT_PREFIX)
-client = commands.Bot(command_prefix=commands.when_mentioned_or(BOT_PREFIX),
-                    description=DESCRIPTION, intents=intents)
+DESCRIPTION = 'TrixBot created by zek#0243'
+client = commands.Bot(command_prefix=get_prefix, description=DESCRIPTION)
 
-initial_extensions = ['commands',
-                    'admin',
-                    'events']
 
-if __name__ == '__main__':
-    for extension in initial_extensions:
-        print(f'{extension} yüklendi.')
-        client.load_extension(extension)
-        
+for filename in os.listdir('./cogs'):
+    if filename.endswith('.py') and filename != '__init__.py':
+        client.load_extension(f'cogs.{filename[:-3]}')
+
 
 @client.event
 async def on_ready():
     print("-------------------------------------------")
     print(f'{client.user} ONLINE')
-    print(f'{len(client.guilds)} sunucuda toplam {str(len(set(client.get_all_members())))} kullanıcının erişimi var.')
+    print(f'{len(client.guilds)} sunucuda bağlantı kuruldu.')
+    print(f'Botun aktif olduğu sunucular: ')
     for guild in client.guilds:
-        print(f'Botun aktif olduğu sunucular: {guild.name}')
+        print(f'\t {guild.name}')
         if guild == "GUILD":
             break
     print(f'Ping: {round(client.latency * 1000)}ms')
-    await client.change_presence(activity=discord.Game(name=f'TrixBot | © @zek#0243'))
+    await client.change_presence(activity=discord.Game(name=f'TrixBot | z3k#9999'))
     print("-------------------------------------------")
 
 @client.event
@@ -55,14 +50,5 @@ async def on_message(message):
 
     await client.process_commands(message)
 
-
-
-
-
-
-
-
-
-
-
-client.run(os.environ.get('TOKEN'))
+DISCORD_BOT_TOKEN = 'NzkzOTUyOTE0MTA4MTg2NjM1.X-zwRQ.Q46q9JIzaopWvOU-YwnibC233QE'
+client.run(DISCORD_BOT_TOKEN)
