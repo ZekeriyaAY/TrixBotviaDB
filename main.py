@@ -50,5 +50,5 @@ async def on_message(message):
 
     await client.process_commands(message)
 
-DISCORD_BOT_TOKEN = 'NzkzOTUyOTE0MTA4MTg2NjM1.X-zwRQ.Q46q9JIzaopWvOU-YwnibC233QE'
-client.run(DISCORD_BOT_TOKEN)
+
+client.run((os.environ.get('TOKEN'))
