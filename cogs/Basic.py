@@ -28,7 +28,7 @@ class Basic(commands.Cog):
 
     @commands.command(brief='Sunucu Hakkında Bilgiler Verir',
                       aliases=['bilgi', 'serverbilgi'])
-    async def status(self, ctx):
+    async def server(self, ctx):
         guild = ctx.guild
 
         voice_channels = len(guild.voice_channels)
@@ -44,7 +44,8 @@ class Basic(commands.Cog):
         embed = discord.Embed(colour=discord.Colour.red())
         embed.set_thumbnail(url=guild.icon_url)
         embed.set_image(url=guild.banner_url)
-        embed.set_footer(text=now.strftime("%X     %x %A"))
+        embed.set_footer(text=now.strftime("%X  •  %x  •  %A"))
+
 
         embed.add_field(name="Server Name", value=guild.name, inline=False)
         embed.add_field(name="Voice Channel", value=voice_channels)
@@ -55,33 +56,7 @@ class Basic(commands.Cog):
         async with ctx.typing():
             pass
         await ctx.send(embed=embed)
-    async def status(self, ctx):
-        guild = ctx.guild
 
-        voice_channels = len(guild.voice_channels)
-        text_channels = len(guild.text_channels)
-
-        emoji_string = ""
-        for e in guild.emojis:
-            if e.is_usable():
-                emoji_string += str(e)
-
-        now = datetime.datetime.now()
-
-        embed = discord.Embed(colour=discord.Colour.red())
-        embed.set_thumbnail(url=guild.icon_url)
-        embed.set_image(url=guild.banner_url)
-        embed.set_footer(text=now.strftime("%X     %x %A"))
-
-        embed.add_field(name="Server Name", value=guild.name, inline=False)
-        embed.add_field(name="Voice Channel", value=voice_channels)
-        embed.add_field(name="Text Channel", value=text_channels)
-        embed.add_field(name="AFK Channel", value=guild.afk_channel, inline=False)
-        embed.add_field(name="Server Emoji", value=emoji_string or "None", inline=False)
-
-        async with ctx.typing():
-            pass
-        await ctx.send(embed=embed)
 
 
 def setup(client):

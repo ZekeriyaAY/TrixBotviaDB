@@ -20,7 +20,7 @@ def get_autorole_int(client, msg):
         roles = json.load(f)
     return roles[str(client.guild.id)]
 
-DESCRIPTION = 'TrixBot created by zek#0243'
+DESCRIPTION = 'TrixBot Hoşgeldin'
 client = commands.Bot(command_prefix=get_prefix, description=DESCRIPTION)
 
 
@@ -40,7 +40,7 @@ async def on_ready():
         if guild == "GUILD":
             break
     print(f'Ping: {round(client.latency * 1000)}ms')
-    await client.change_presence(activity=discord.Game(name=f'TrixBot | z3k#9999'))
+    await client.change_presence(activity=discord.Game(name=f'TrixBot'))
     print("-------------------------------------------")
 
 @client.event
