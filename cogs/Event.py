@@ -1,8 +1,6 @@
 import json
-
 from discord.ext import commands
 from discord.utils import get
-
 from main import get_autorole_int
 
 
