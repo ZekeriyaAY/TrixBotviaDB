@@ -1,9 +1,8 @@
 from discord.ext import commands
+import discord
 import json
 
-from discord.utils import get
-
-from main import get_prefix, get_autorole, get_autorole_int
+from main import get_prefix, get_autorole_int
 
 
 class Moderator(commands.Cog):
@@ -42,23 +41,39 @@ class Moderator(commands.Cog):
         await ctx.channel.send(f'**{ctx.guild.name}** sunucusunun oto rolü  **{role}**  ile değiştirildi.')
 
     @commands.command(aliases=["prefix", "önek", "onek"])
+    @commands.has_permissions(administrator=True)
     async def getprefix(self, ctx):
         prefix = get_prefix(ctx, ctx)
         await ctx.send(f"**{ctx.guild.name}** sunucusunun prefix'i  **{prefix}**")
 
     @commands.command(aliases=["otorol"])
+    @commands.has_permissions(manage_roles=True)
     async def getautorole(self, ctx):
         role_id = get_autorole_int(ctx, ctx)
         role = ctx.guild.get_role(role_id=role_id)
         await ctx.send(f"**{ctx.guild.name}** sunucusunun oto rolü  **{role.mention}**")
 
     @commands.command()
-    async def oi(self, member):
-        role_id = get_autorole_int(member, member)
-        role = get(member.guild.roles, id=role_id)
-        await member.add_roles(role)
-        await member.send(role.mention)
+    @commands.has_permissions(ban_members=True)
+    async def ban(self, ctx, member: discord.Member, *, reason=None):
+        await member.ban(reason=reason)
+        await ctx.send(f'*{member.mention}*, *{ctx.message.author.mention}* tarafından banlandı.\n**Sebep:** *{reason}*')
 
+    @commands.command()
+    @commands.has_permissions(ban_members=True)
+    async def unban(self, ctx, member, *, reason=None):
+        bans = await ctx.guild.bans()
+        for b in bans:
+            if b.user.name == member:
+                await ctx.guild.unban(b.user, reason=reason)
+                await ctx.send(f"*{member}*, *{ctx.message.author.mention}* tarafından ban'ı kaldırıldı.\n**Sebep:** *{reason}*")
+                return
+
+    @commands.command()
+    @commands.has_permissions(kick_members=True)
+    async def kick(self, ctx, member: discord.Member, *, reason=None):
+        await member.kick(reason=reason)
+        await ctx.send(f'*{member.mention}*, *{ctx.message.author.mention}* tarafından atıldı.\n**Sebep:** *{reason}*')
 
 def setup(client):
     client.add_cog(Moderator(client))
