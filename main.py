@@ -1,27 +1,27 @@
 import discord
 from discord.ext import commands
 import os
-import json
+import sqlite3
+from Utility import get_prefix
 
-def get_prefix(client, msg):
-    with open('./jsons/prefixes.json', 'r') as f:
-        prefixes = json.load(f)
-    return prefixes[str(msg.guild.id)]
-
-
-def get_autorole(client, msg):
-    with open('./jsons/auto_roles.json', 'r') as f:
-        roles = json.load(f)
-    return roles[str(msg.guild.id)]
+conn = sqlite3.connect('Database.db')
+c = conn.cursor()
 
 
-def get_autorole_int(client, msg):
-    with open('./jsons/auto_roles_int.json', 'r') as f:
-        roles = json.load(f)
-    return roles[str(client.guild.id)]
+c.execute("CREATE TABLE IF NOT EXISTS ServerConfig (ServerId INTEGER UNIQUE,"
+          "Prefix TEXT DEFAULT '+', Language TEXT DEFAULT 'tr', LogControl TEXT DEFAULT 'false',"
+          "LogChannel INTEGER, GreetMsgControl TEXT DEFAULT 'false',"
+          "GreetMsg TEXT, GreetChannel INTEGER,"
+          "GreetDmMsgControl TEXT DEFAULT 'false', GreetDmMsg TEXT,"
+          "LeaveMsgControl TEXT DEFAULT 'false', LeaveMsg TEXT,"
+          "LeaveChannel INTEGER, AutoRoleControl TEXT DEFAULT 'false',"
+          "AutoRoleId INTEGER, LevelControl TEXT DEFAULT 'false',"
+          "LevelMsg TEXT, LevelChannel INTEGER)")
 
+intents = discord.Intents.default()
+intents.members = True
 DESCRIPTION = 'TrixBot Hoşgeldin'
-client = commands.Bot(command_prefix=get_prefix, description=DESCRIPTION)
+client = commands.Bot(command_prefix=get_prefix, intents=intents, description=DESCRIPTION)
 
 
 for filename in os.listdir('./cogs'):
@@ -42,6 +42,7 @@ async def on_ready():
     print(f'Ping: {round(client.latency * 1000)}ms')
     await client.change_presence(activity=discord.Game(name=f'TrixBot'))
     print("-------------------------------------------")
+    
 
 @client.event
 async def on_message(message):
@@ -49,6 +50,7 @@ async def on_message(message):
         return
 
     await client.process_commands(message)
+
 
 
 client.run(os.environ.get('TOKEN'))

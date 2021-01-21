@@ -7,6 +7,10 @@ class Basic(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+    @commands.command()
+    async def say(self, ctx, *, msg):
+        await ctx.send(msg)
+
     @commands.command(brief='Sunucuya Davet Linki Verir Yoksa Oluşturur',
                       aliases=['davet', 'davetet'])
     @commands.guild_only()
@@ -43,7 +47,6 @@ class Basic(commands.Cog):
 
         embed = discord.Embed(colour=discord.Colour.red())
         embed.set_thumbnail(url=guild.icon_url)
-        embed.set_image(url=guild.banner_url)
         embed.set_footer(text=now.strftime("%X  •  %x  •  %A"))
 
 

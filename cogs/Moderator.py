@@ -1,9 +1,10 @@
+import sqlite3
 from discord.ext import commands
 import discord
-import json
+from Utility import get_prefix, get_autorole
 
-from main import get_prefix, get_autorole_int
-
+conn = sqlite3.connect('Database.db')
+c = conn.cursor()
 
 class Moderator(commands.Cog):
     def __init__(self, client):
@@ -12,32 +13,17 @@ class Moderator(commands.Cog):
     @commands.command(aliases=["prefixDeğiştir", "prefixdeğiştir", "prefixdeğiş", "prefixayarla"])
     @commands.has_permissions(administrator=True)
     async def changeprefix(self, ctx, prefix):
-        with open("./jsons/prefixes.json", "r") as f:
-            prefixes = json.load(f)
-        prefixes[str(ctx.guild.id)] = prefix
-        with open("./jsons/prefixes.json", "w") as f:
-            json.dump(prefixes, f, indent=4)
+        serverId = str(ctx.guild.id)
+        c.execute("UPDATE ServerConfig SET Prefix = ? WHERE ServerId = ?", (prefix, serverId))
+        conn.commit()
         await ctx.channel.send(f'**{ctx.guild.name}** sunucusunun prefix(önek)i  **{prefix}**  ile değiştirildi.')
 
     @commands.command(aliases=["otoRolDeğiştir", "otoroldeğiştir", "otoroldeğiş", "otorolayarla"])
-    @commands.has_permissions(manage_roles=True)
+    @commands.has_permissions(administrator=True)
     async def changeautorole(self, ctx, role):
-        trash = "<>@&"
-        int_role = role
-        for char in trash:
-            int_role = int_role.replace(char, "")
-
-        with open("./jsons/auto_roles_int.json", "r") as f:
-            roles = json.load(f)
-        roles[str(ctx.guild.id)] = int(int_role)
-        with open("./jsons/auto_roles_int.json", "w") as f:
-            json.dump(roles, f, indent=4)
-
-        with open("./jsons/auto_roles.json", "r") as f:
-            roles = json.load(f)
-        roles[str(ctx.guild.id)] = role
-        with open("./jsons/auto_roles.json", "w") as f:
-            json.dump(roles, f, indent=4)
+        serverId = str(ctx.guild.id)
+        c.execute("UPDATE ServerConfig SET AutoRoleId = ? WHERE ServerId = ?",(role, serverId))
+        conn.commit()
         await ctx.channel.send(f'**{ctx.guild.name}** sunucusunun oto rolü  **{role}**  ile değiştirildi.')
 
     @commands.command(aliases=["prefix", "önek", "onek"])
@@ -49,9 +35,8 @@ class Moderator(commands.Cog):
     @commands.command(aliases=["otorol"])
     @commands.has_permissions(manage_roles=True)
     async def getautorole(self, ctx):
-        role_id = get_autorole_int(ctx, ctx)
-        role = ctx.guild.get_role(role_id=role_id)
-        await ctx.send(f"**{ctx.guild.name}** sunucusunun oto rolü  **{role.mention}**")
+        role = get_autorole(ctx, ctx)
+        await ctx.send(f"**{ctx.guild.name}** sunucusunun oto rolü  **{role}**")
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
