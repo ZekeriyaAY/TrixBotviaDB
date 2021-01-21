@@ -1,4 +1,5 @@
-discord.py ~= 1.5.1
-pip
-aiohttp ~= 3.6.3
-sqlite3
+discord.py == 1.5.1
+pip == 20.3.3
+aiohttp == 3.6.3
+async-timeout == 3.0.1
+setuptools == 49.2.1
