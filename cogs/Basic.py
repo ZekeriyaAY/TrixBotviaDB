@@ -31,7 +31,7 @@ class Basic(commands.Cog):
         await ctx.send(f'*Ping: **{round(self.client.latency * 1000)}ms***')
 
     @commands.command(brief='Sunucu Hakkında Bilgiler Verir',
-                      aliases=['bilgi', 'serverbilgi'])
+                      aliases=['bilgi', 'serverbilgi', 'serverinfo'])
     async def server(self, ctx):
         guild = ctx.guild
 

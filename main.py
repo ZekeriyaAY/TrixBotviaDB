@@ -22,11 +22,13 @@ intents = discord.Intents.default()
 intents.members = True
 DESCRIPTION = 'TrixBot Hoşgeldin'
 client = commands.Bot(command_prefix=get_prefix, intents=intents, description=DESCRIPTION)
+client.remove_command("help")
 
-
+print("-------------------------------------------")
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py') and filename != '__init__.py':
         client.load_extension(f'cogs.{filename[:-3]}')
+        print(filename)
 
 
 @client.event
@@ -39,8 +41,9 @@ async def on_ready():
         print(f'\t {guild.name}')
         if guild == "GUILD":
             break
+
     print(f'Ping: {round(client.latency * 1000)}ms')
-    await client.change_presence(activity=discord.Game(name=f'TrixBot'))
+    await client.change_presence(activity=discord.Streaming(name="ERYSTRIX" ,url="https://www.twitch.tv/erystrix"))
     print("-------------------------------------------")
     
 

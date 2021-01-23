@@ -1,7 +1,7 @@
 from discord.ext import commands
 from discord.utils import get
 
-from Utility import get_autorole, get_prefix
+from Utility import get_autorole
 import sqlite3
 
 conn = sqlite3.connect('Database.db')
@@ -11,10 +11,6 @@ class Event(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx, ex):
-        await ctx.send(f'Lütfen **{get_prefix(ctx,ctx)}help** komutundan kontrol edin veya yetkili birine başvurun.'
-                       f'\n**Hata:** *{ex}*')
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):

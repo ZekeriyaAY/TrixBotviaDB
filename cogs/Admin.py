@@ -1,40 +1,29 @@
+import sqlite3
 from discord.ext import commands
 
+
+conn = sqlite3.connect('Database.db')
+c = conn.cursor()
 
 class Admin(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command()
+    @commands.command(aliases=["prefixDeğiştir", "prefixdeğiştir", "prefixdeğiş", "prefixayarla"])
     @commands.has_permissions(administrator=True)
-    async def unload(self, ctx, cog: str):
-        try:
-            self.client.unload_extension(f'cogs.{cog}')
-        except Exception as e:
-            await ctx.send(f'HATA: {e}')
-            return
-        await ctx.send(f'{cog} Cog Unloaded')
+    async def changeprefix(self, ctx, prefix):
+        serverId = str(ctx.guild.id)
+        c.execute("UPDATE ServerConfig SET Prefix = ? WHERE ServerId = ?", (prefix, serverId))
+        conn.commit()
+        await ctx.channel.send(f'**{ctx.guild.name}** sunucusunun prefix(önek)i  **{prefix}**  ile değiştirildi.')
 
-    @commands.command()
+    @commands.command(aliases=["otoRolDeğiştir", "otoroldeğiştir", "otoroldeğiş", "otorolayarla"])
     @commands.has_permissions(administrator=True)
-    async def load(self, ctx, cog: str):
-        try:
-            self.client.load_extension(f'cogs.{cog}')
-        except Exception as e:
-            await ctx.send(f'HATA: {e}')
-            return
-        await ctx.send(f'{cog} Cog Loaded')
-
-    @commands.command()
-    @commands.has_permissions(administrator=True)
-    async def reload(self, ctx, cog: str):
-        try:
-            self.client.reload_extension(f'cogs.{cog}')
-        except Exception as e:
-            await ctx.send(f'HATA: {e}')
-            return
-        await ctx.send(f'{cog} Cog Reloaded')
-
+    async def changeautorole(self, ctx, role):
+        serverId = str(ctx.guild.id)
+        c.execute("UPDATE ServerConfig SET AutoRoleId = ? WHERE ServerId = ?", (role, serverId))
+        conn.commit()
+        await ctx.channel.send(f'**{ctx.guild.name}** sunucusunun oto rolü  **{role}**  ile değiştirildi.')
 
 def setup(client):
     client.add_cog(Admin(client))
