@@ -1,4 +1,7 @@
-.vscode
+venv
+__pycache__
 .idea
-__pycache__/
-cogs/__pycache__/
+.idea/vcs.xml
+.idea/TrixBot.iml
+.idea/modules.xml
+.idea/inspectionProfiles/profiles_settings.xml
