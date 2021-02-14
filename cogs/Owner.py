@@ -40,7 +40,7 @@ class Owner(commands.Cog):
         error = getattr(error, "original", error)
         if isinstance(error, commands.MissingRequiredArgument):
             embed = discord.Embed(title=":grey_question: COG KULLANIMI :grey_question:",
-                                  color=discord.Color.orange())
+                                  color=discord.Color.gold())
             embed.add_field(name="Devre Dışı Bırakmak için", value=f'**`{get_prefix(ctx, ctx)}unload [cog_adı]`**')
             embed.add_field(name="Yüklemek için", value=f'**`{get_prefix(ctx, ctx)}load [cog_adı]`**')
             embed.add_field(name="Tekrar Kurmak için", value=f'**`{get_prefix(ctx, ctx)}reload [cog_adı]`**')
@@ -57,7 +57,7 @@ class Owner(commands.Cog):
             await ctx.send(embed=embed)
         elif isinstance(error, commands.ExtensionAlreadyLoaded):
             embed = discord.Embed(title=":grey_question: COG ZATEN YÜKLÜ :grey_question:",
-                                  color=discord.Color.orange())
+                                  color=discord.Color.gold())
             embed.add_field(name="Hata Mesajı", value=f'*{error}*')
             await ctx.send(embed=embed)
         elif isinstance(error, commands.ExtensionNotLoaded):

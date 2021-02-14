@@ -21,7 +21,7 @@ class AutoRole(commands.Cog):
                               color=discord.Color.green())
         await ctx.send(embed=embed)
 
-    @commands.command(aliases=["otorol", "otorolonoff", "otorolaçkapat", "otorolackapat"])
+    @commands.command(aliases=["otorol"])
     @commands.has_permissions(manage_roles=True)
     async def autorole(self, ctx, onoff):
         serverId = str(ctx.guild.id)
@@ -31,9 +31,9 @@ class AutoRole(commands.Cog):
 
         if onoff == 'on' or onoff == 'aç':
             if status == 'on':
-                embed = discord.Embed(title=":white_check_mark: OTO ROL AÇIK :white_check_mark:",
+                embed = discord.Embed(title=":grey_question: OTO ROL AÇIK :grey_question:",
                     description=f'Otomatik rol verme özelliği zaten ***AÇIK***',
-                    color=discord.Color.green())
+                    color=discord.Color.gold())
                 await ctx.send(embed=embed)
                 return
             elif status == 'off':
@@ -54,15 +54,15 @@ class AutoRole(commands.Cog):
                 await ctx.send(embed=embed)
                 return
             elif status == 'off':
-                embed = discord.Embed(title=":white_check_mark: OTO ROL KAPALI :white_check_mark:",
+                embed = discord.Embed(title=":grey_question: OTO ROL KAPALI :grey_question:",
                     description=f'Otomatik rol verme özelliği zaten ***KAPALI***',
-                    color=discord.Color.green())
+                    color=discord.Color.gold())
                 await ctx.send(embed=embed)
                 return
         else:
             embed = discord.Embed(title=":grey_question: HATALI ARGÜMAN KULLANIMI :grey_question:",
                                   description=f'Otomatik rol verme özelliğini',
-                                  color=discord.Color.orange())
+                                  color=discord.Color.gold())
             embed.add_field(name="Açmak için", value=f'***`{get_prefix(ctx, ctx)}autorole on/aç`***')
             embed.add_field(name="Kapatmak için", value=f'***`{get_prefix(ctx, ctx)}autorole off/kapat`***')
             await ctx.send(embed=embed)
@@ -79,13 +79,13 @@ class AutoRole(commands.Cog):
             role = get_autorole(ctx, ctx)
 
             embed = discord.Embed(title=":question: OTO ROL KULLANIMI :question:",
-                                  color=discord.Color.red())
+                                  color=discord.Color.gold())
             if status == 'on':
-                embed.add_field(name="Rol Verme Sistemi", value="***`AÇIK`***")
+                embed.add_field(name="Rol Verme Özelliği", value="***`AÇIK`***")
             elif status == 'off':
-                embed.add_field(name="Rol Verme Sistemi", value="***`KAPALI`***")
+                embed.add_field(name="Rol Verme Özelliği", value="***`KAPALI`***")
             embed.add_field(name="Verilcek Rol", value=f'{role}')
-            embed.add_field(name=":heavy_minus_sign:", value=f'***Otomatik rol verme özelliğini;***', inline=False)
+            embed.add_field(name=":heavy_minus_sign:", value=f'**Otomatik rol verme özelliğini;**', inline=False)
             embed.add_field(name="Açmak için", value=f'***`{get_prefix(ctx, ctx)}autorole on/aç`***')
             embed.add_field(name="Kapatmak için", value=f'***`{get_prefix(ctx, ctx)}autorole off/kapat`***')
             await ctx.send(embed=embed)

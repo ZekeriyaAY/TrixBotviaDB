@@ -48,7 +48,15 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
-    await client.process_commands(message)
 
+    # MESAJ YAZAN ÜYE DB E KAYITLI DEĞİLSE KAYDEDİLİR
+    if not(message.author.bot):
+        c.execute("SELECT * FROM LevelSystem WHERE ServerId = ? AND MemberId = ?", (message.guild.id, message.author.id,))
+        status = c.fetchone()
+        if status is None:
+            c.execute("INSERT INTO LevelSystem (ServerId, MemberId) VALUES (?, ?)", (message.guild.id, message.author.id,))
+            conn.commit()
+
+    await client.process_commands(message)
 
 client.run(os.environ.get('TOKEN'))
